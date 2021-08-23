@@ -2,16 +2,19 @@ const inputNumber = document.getElementById("input_number");
 const inputCurrency = document.getElementById("input_currency");
 const outputNumber = document.getElementById("output_number");
 const outputCurrency = document.getElementById("output_currency");
-const api_key = "exchangerate-api-key";
+const api_key = "api_key_here";
 
 function calculate(input) {
-    const inputCurrencyNow = input ? document.getElementById("input_currency").value : document.getElementById("output_currency").value;
-    const outputCurrencyNow = input ? document.getElementById("output_currency").value : document.getElementById("input_currency").value;
+    const inputCurrencyNow = input ? inputCurrency.value : outputCurrency.value;
+    const outputCurrencyNow = input ? outputCurrency.value : inputCurrency.value;
 
     fetch(`https://v6.exchangerate-api.com/v6/${api_key}/latest/${inputCurrencyNow}`)
         .then(value => value.json())
         .then((json) => {
-            document.getElementById(input ? "output_number" : "input_number").value = (inputNumber.value * json.conversion_rates[outputCurrencyNow]).toFixed(2);
+            const value = (inputNumber.value * json.conversion_rates[outputCurrencyNow]).toFixed(2);
+            if (input)
+                outputNumber.value = value;
+            else inputNumber.value = value;
         })
 
 }
